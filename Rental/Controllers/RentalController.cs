@@ -1,83 +1,31 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Rental.Data.Facade;
 
 namespace Rental.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class RentalController : Controller
     {
-        // GET: RentalController
-        public ActionResult Index()
+        private readonly IRentalRepository _rentalRepository;
+
+        public RentalController(IRentalRepository rentalRepository)
         {
-            return View();
+            _rentalRepository = rentalRepository;
         }
 
-        // GET: RentalController/Details/5
-        public ActionResult Details(int id)
+        /// <summary>
+        /// Get Rental Status
+        /// </summary>
+        /// <remarks>
+        /// Returns the rental status
+        /// </remarks>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult<string> GetRentalStatus()
         {
-            return View();
-        }
-
-        // GET: RentalController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: RentalController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: RentalController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: RentalController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: RentalController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: RentalController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Ok("Rental status: OK");
         }
     }
 }

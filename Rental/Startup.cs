@@ -2,11 +2,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Rental.Data;
+using Rental.Data.Facade;
+using Rental.Service;
+using Rental.Service.Facade;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +32,21 @@ namespace Rental
         public void ConfigureServices(IServiceCollection services)
         {
 
+            // In-memory database:
+            services.AddDbContext<RentalContext>(opt => opt.UseInMemoryDatabase("RentalDb"));
+
+            // Register services for dependency injection
+            services.AddScoped<IRentalService, RentalService>();
+
+            // Register repositories for dependency injection
+            services.AddScoped<IRentalRepository, RentalRepository>();
+
+            // Register database initializer for dependency injection
+            services.AddTransient<IDbInitializer, DbInitializer>();
+
+            services.AddSwaggerGen();
+
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rental", Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
