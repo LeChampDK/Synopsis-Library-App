@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Rental.Data.Facade;
+﻿using Microsoft.AspNetCore.Mvc;
+using Rental.Models;
+using Rental.Service.Facade;
+using System.Collections.Generic;
 
 namespace Rental.Controllers
 {
@@ -8,11 +9,11 @@ namespace Rental.Controllers
     [Route("[controller]")]
     public class RentalController : Controller
     {
-        private readonly IRentalRepository _rentalRepository;
+        private readonly IRentalService _rentalService;
 
-        public RentalController(IRentalRepository rentalRepository)
+        public RentalController(IRentalService rentalService)
         {
-            _rentalRepository = rentalRepository;
+            _rentalService = rentalService;
         }
 
         /// <summary>
@@ -23,9 +24,9 @@ namespace Rental.Controllers
         /// </remarks>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<string> GetRentalStatus()
+        public ActionResult<List<RentalStatus>> GetRentalStatus()
         {
-            return Ok("Rental status: OK");
+            return _rentalService.GetAllRentalStatus();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Rental.Models;
 
 namespace Rental.Data
 {
@@ -8,5 +9,7 @@ namespace Rental.Data
         {
 
         }
+
+        public DbSet<RentalStatus> RentalStatus { get; set; }
     }
 }

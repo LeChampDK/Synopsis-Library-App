@@ -16,9 +16,7 @@ namespace Users.Data
 
         public User GetUser(int Id)
         {
-            var result = _db.Users.FirstOrDefault(x => x.Id == Id);
-
-            return result;
+            return _db.Users.FirstOrDefault(x => x.Id == Id);
         }
     }
 }

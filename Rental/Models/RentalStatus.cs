@@ -9,6 +9,6 @@ namespace Rental.Models
         public int BookId { get; set; }
         public bool Rented { get; set; }
         public bool Reserve { get; set; }
-        public DateTime ReservedTime { get; set; }
+        public DateTime? ReservedTime { get; set; }
     }
 }
