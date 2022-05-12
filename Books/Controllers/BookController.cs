@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Books.Service.Facade;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Books.Controllers
@@ -7,6 +8,12 @@ namespace Books.Controllers
     [Route("[controller]")]
     public class BookController : Controller
     {
+        private readonly IBookService _bookService;
+
+        public BookController(IBookService bookService)
+        {
+            _bookService = bookService;
+        }
 
         /// <summary>
         /// Get Book
@@ -18,7 +25,8 @@ namespace Books.Controllers
         [HttpGet]
         public ActionResult<string> GetBook()
         {
-            return Ok("HERRY POTTAH");
+            var result = _bookService.getBooks();
+            return Ok(result);
         }
     }
 }
