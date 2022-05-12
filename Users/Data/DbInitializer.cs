@@ -3,7 +3,6 @@
 namespace Users.Data
 {
     public class DbInitializer : IDbInitializer
-    
-
+    { 
     }
 }
