@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  books:
+    image: ${DOCKER_REGISTRY-}books
+    build:
+      context: .
+      dockerfile: Books/Dockerfile
+
+  rental:
+    image: ${DOCKER_REGISTRY-}rental
+    build:
+      context: .
+      dockerfile: Rental/Dockerfile
+
+  users:
+    image: ${DOCKER_REGISTRY-}users
+    build:
+      context: .
+      dockerfile: Users/Dockerfile
+
