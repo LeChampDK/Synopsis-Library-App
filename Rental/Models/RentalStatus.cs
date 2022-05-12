@@ -8,7 +8,7 @@ namespace Rental.Models
         public int UserId { get; set; }
         public int BookId { get; set; }
         public bool Rented { get; set; }
-        public bool Reserved { get; set; }
+        public bool Reserve { get; set; }
         public DateTime ReservedTime { get; set; }
     }
 }
