@@ -25,7 +25,7 @@ namespace Users
         public void ConfigureServices(IServiceCollection services)
         {
             // In-memory database:
-            services.AddDbContext<UserContext>(opt => opt.UseInMemoryDatabase("UsersDb"));
+            services.AddDbContext<UserContext>(opt => opt.UseInMemoryDatabase("UserDb"));
 
             // Register services for dependency injection
             services.AddScoped<IUserService, UserService>();
@@ -56,7 +56,7 @@ namespace Users
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Users v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "User v1");
             });
 
             //app.UseHttpsRedirection();
