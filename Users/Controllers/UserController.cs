@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Users.Models;
 using Users.Service.Facade;
 
 namespace Users.Controllers
@@ -22,10 +23,11 @@ namespace Users.Controllers
         /// Returns the user
         /// </remarks>
         /// <returns></returns>
-        [HttpGet]
-        public ActionResult<string> GetUser()
+        [HttpGet("{Id}")]
+        public ActionResult<User> GetUser(int Id)
         {
-            return Ok("YELLOW");
+            var result = _userService.GetUser(Id);
+            return Ok(result);
         }
     }
 }

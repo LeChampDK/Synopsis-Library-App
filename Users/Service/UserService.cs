@@ -1,11 +1,22 @@
-﻿using Users.Service.Facade;
+﻿using System.Threading.Tasks;
+using Users.Data.Facade;
+using Users.Models;
+using Users.Service.Facade;
 
 namespace Users.Service
 {
     public class UserService : IUserService
     {
-        public UserService()
+        private readonly IUserRepository _userRepository;
+
+        public UserService(IUserRepository userRepository)
         {
+            _userRepository = userRepository;
+        }
+
+        public User GetUser(int Id)
+        {
+            return _userRepository.GetUser(Id);
         }
     }
 }

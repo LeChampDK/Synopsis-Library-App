@@ -5,12 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Messages\**" />
-    <Compile Remove="Models\**" />
-    <EmbeddedResource Remove="Messages\**" />
-    <EmbeddedResource Remove="Models\**" />
-    <None Remove="Messages\**" />
-    <None Remove="Models\**" />
+    <Folder Include="Messages\Response\" />
+    <Folder Include="Messages\Request\" />
   </ItemGroup>
 
 </Project>
