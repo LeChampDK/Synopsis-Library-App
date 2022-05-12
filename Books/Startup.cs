@@ -1,16 +1,13 @@
+using Books.Data;
+using Books.Data.Facade;
+using Books.Service;
+using Books.Service.Facade;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Books
 {
@@ -26,12 +23,21 @@ namespace Books
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // In-memory database:
+            services.AddDbContext<BookContext>(opt => opt.UseInMemoryDatabase("UsersDb"));
+
+            // Register services for dependency injection
+            services.AddScoped<IBookService, BookService>();
+
+            // Register repositories for dependency injection
+            services.AddScoped<IBookRepository, BookRepository>();
+
+            // Register database initializer for dependency injection
+            services.AddTransient<IDbInitializer, DbInitializer>();
+
+            services.AddSwaggerGen();
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Books", Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,11 +46,19 @@ namespace Books
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Books v1"));
             }
 
-            app.UseHttpsRedirection();
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Books v1");
+            });
+
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

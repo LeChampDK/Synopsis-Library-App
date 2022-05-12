@@ -4,5 +4,8 @@ namespace Books.Service
 {
     public class BookService : IBookService
     {
+        public BookService()
+        {
+        }
     }
 }
