@@ -2,7 +2,7 @@
 
 namespace Rental.Data
 {
-    public class DbInitializer : IDbInitializer
+    public class RentalRepository : IRentalRepository
     {
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace Books.Service
+﻿using Books.Service.Facade;
+
+namespace Books.Service
 {
-    public class BookService
+    public class BookService : IBookService
     {
     }
 }

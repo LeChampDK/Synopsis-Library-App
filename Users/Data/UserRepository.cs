@@ -2,8 +2,7 @@
 
 namespace Users.Data
 {
-    public class DbInitializer : IDbInitializer
-    
-
+    public class UserRepository : IUserRepository 
+    {
     }
 }

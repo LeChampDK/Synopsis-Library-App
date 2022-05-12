@@ -1,6 +1,8 @@
-﻿namespace Rental.Service
+﻿using Rental.Service.Facade;
+
+namespace Rental.Service
 {
-    public class RentalService
+    public class RentalService : IRentalService
     {
     }
 }
