@@ -1,26 +1,29 @@
+using APIGateway.Service;
+using APIGateway.Service.Facade;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Users.Data;
-using Users.Data.Facade;
-using Users.Service.Facade;
-using Users.Service;
-using Global;
-using Users.MessageGateway;
+using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace Users
+namespace APIGateway
 {
     public class Startup
     {
-        string cloudAMQPConnectionString = Config.cloudAMQPConnectionString;
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -28,20 +31,7 @@ namespace Users
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // In-memory database:
-            services.AddDbContext<UserContext>(opt => opt.UseInMemoryDatabase("UserDb"));
-
-            // Register services for dependency injection
-            services.AddScoped<IUserService, UserService>();
-
-            // Register repositories for dependency injection
-            services.AddScoped<IUserRepository, UserRepository>();
-
-            // Register database initializer for dependency injection
-            services.AddTransient<IDbInitializer, DbInitializer>();
-
-            services.AddSingleton<MessageProducer>(new
-                MessageProducer(cloudAMQPConnectionString));
+            services.AddScoped<IAPIGatewayService, APIGatewayService>();
 
             services.AddSwaggerGen();
 
@@ -51,15 +41,6 @@ namespace Users
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                // Initialize the database
-                var services = scope.ServiceProvider;
-                var dbContext = services.GetService<UserContext>();
-                var dbInitializer = services.GetService<IDbInitializer>();
-                dbInitializer.Initialize(dbContext);
-            }
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -72,7 +53,8 @@ namespace Users
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "User v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Library App v1");
+                c.DocumentTitle = "Library App";
             });
 
             //app.UseHttpsRedirection();
@@ -85,8 +67,6 @@ namespace Users
             {
                 endpoints.MapControllers();
             });
-            Task.Factory.StartNew(() =>
-              new MessageReceiver(app.ApplicationServices, cloudAMQPConnectionString).Start());
         }
     }
 }

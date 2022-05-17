@@ -19,3 +19,8 @@ services:
       context: .
       dockerfile: Users/Dockerfile
 
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: APIGateway/Dockerfile
