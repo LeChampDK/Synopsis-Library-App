@@ -9,11 +9,15 @@ using Users.Data;
 using Users.Data.Facade;
 using Users.Service.Facade;
 using Users.Service;
+using Global;
+using Users.MessageGateway;
+using System.Threading.Tasks;
 
 namespace Users
 {
     public class Startup
     {
+        string cloudAMQPConnectionString = Config.cloudAMQPConnectionString;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -35,6 +39,9 @@ namespace Users
 
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();
+
+            services.AddSingleton<MessageProducer>(new
+                MessageProducer(cloudAMQPConnectionString));
 
             services.AddSwaggerGen();
 
@@ -78,6 +85,8 @@ namespace Users
             {
                 endpoints.MapControllers();
             });
+            Task.Factory.StartNew(() =>
+              new MessageReceiver(app.ApplicationServices, cloudAMQPConnectionString).Start());
         }
     }
 }
