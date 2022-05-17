@@ -1,3 +1,4 @@
+using Global;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Rental.Data;
 using Rental.Data.Facade;
+using Rental.Data.MessageGateway;
 using Rental.Service;
 using Rental.Service.Facade;
 using System;
@@ -21,6 +23,7 @@ namespace Rental
 {
     public class Startup
     {
+        string cloudAMQPConnectionString = Config.cloudAMQPConnectionString;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -43,6 +46,9 @@ namespace Rental
 
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();
+
+            services.AddSingleton<MessageProducer>(new
+                MessageProducer(cloudAMQPConnectionString));
 
             services.AddSwaggerGen();
 
@@ -86,6 +92,9 @@ namespace Rental
             {
                 endpoints.MapControllers();
             });
+
+            Task.Factory.StartNew(() =>
+                new MessageReceiver(app.ApplicationServices, cloudAMQPConnectionString).Start());
         }
     }
 }

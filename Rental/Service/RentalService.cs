@@ -18,5 +18,10 @@ namespace Rental.Service
         {
             return _rentalRepository.GetAllRentalStatus();
         }
+
+        public List<RentalStatus> GetAllRentalStatusOnBook(int bookId)
+        {
+            return _rentalRepository.GetAllRentalStatusOnBook(bookId);
+        }
     }
 }

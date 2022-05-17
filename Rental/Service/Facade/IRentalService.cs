@@ -7,5 +7,6 @@ namespace Rental.Service.Facade
     public interface IRentalService
     {
         List<RentalStatus> GetAllRentalStatus();
+        List<RentalStatus> GetAllRentalStatusOnBook(int bookId);
     }
 }
