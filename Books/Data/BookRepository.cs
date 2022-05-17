@@ -1,6 +1,7 @@
 ﻿using Books.Data.Facade;
 using Books.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Books.Data
 {
@@ -11,6 +12,13 @@ namespace Books.Data
         public BookRepository(BookContext db)
         {
             _db = db;
+        }
+
+        public Book getBook(int bookId)
+        {
+            var result = _db.Books.FirstOrDefault(x => x.Id == bookId);
+
+            return result;
         }
 
         public List<Book> getBooks()

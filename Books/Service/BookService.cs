@@ -14,6 +14,13 @@ namespace Books.Service
             _bookRepository = bookRepository;
         }
 
+        public Book getBook(int bookId)
+        {
+            var result = _bookRepository.getBook(bookId);
+
+            return result;
+        }
+
         public List<Book> getBooks()
         {
             var result = _bookRepository.getBooks();

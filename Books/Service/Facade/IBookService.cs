@@ -6,5 +6,6 @@ namespace Books.Service.Facade
     public interface IBookService
     {
         List<Book> getBooks();
+        Book getBook(int bookId);
     }
 }
