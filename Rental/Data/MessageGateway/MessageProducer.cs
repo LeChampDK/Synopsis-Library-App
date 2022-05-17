@@ -1,6 +1,7 @@
 ﻿using EasyNetQ;
 using Global.Messages.Request;
 using Rental.Models;
+using System;
 
 namespace Rental.Data.MessageGateway
 {
@@ -26,6 +27,11 @@ namespace Rental.Data.MessageGateway
             };
 
             bus.PubSub.Publish(message);
+        }
+
+        internal bool getUser(int userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
