@@ -1,18 +1,23 @@
 using Books.Data;
 using Books.Data.Facade;
+using Books.Data.MessageGateway;
 using Books.Service;
 using Books.Service.Facade;
+using Global;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
 namespace Books
 {
     public class Startup
     {
+        string cloudAMQPConnectionString = Config.cloudAMQPConnectionString;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,6 +39,9 @@ namespace Books
 
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();
+
+            services.AddSingleton<MessageProducer>(new
+                MessageProducer(cloudAMQPConnectionString));
 
             services.AddSwaggerGen();
 
@@ -77,6 +85,9 @@ namespace Books
             {
                 endpoints.MapControllers();
             });
+
+            Task.Factory.StartNew(() =>
+                new MessageReciever(app.ApplicationServices, cloudAMQPConnectionString).Start());
         }
     }
 }

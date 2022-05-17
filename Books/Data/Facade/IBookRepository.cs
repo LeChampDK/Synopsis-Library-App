@@ -6,5 +6,6 @@ namespace Books.Data.Facade
     public interface IBookRepository
     {
         List<Book> getBooks();
+        Book getBook(int bookId);
     }
 }

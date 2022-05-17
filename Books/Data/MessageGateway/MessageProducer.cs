@@ -1,4 +1,9 @@
-﻿using EasyNetQ;
+﻿using Books.Models;
+using Books.Service.Facade;
+using EasyNetQ;
+using Global.Messages.Request;
+using Global.Messages.Response;
+using Global.Models;
 using System;
 using System.Threading;
 
@@ -6,27 +11,27 @@ namespace Books.Data.MessageGateway
 {
     public class MessageProducer
     {
-        IServiceProvider _provider;
-        string _connectionString;
-        IBus _bus;
+        IBus bus;
 
-        public MessageProducer(IServiceProvider provider, string connectionString)
+        public MessageProducer(string connectionString)
         {
-            _provider = provider;
-            _connectionString = connectionString;
+            bus = RabbitHutch.CreateBus(connectionString);
         }
 
-        public void Start()
+        public void Dispose()
         {
-            using (_bus = RabbitHutch.CreateBus(_connectionString))
-            {
-                
+            bus.Dispose();
+        }
 
-                lock (this)
-                {
-                    Monitor.Wait(this);
-                }
-            }
+        internal void BookResponse(Book result)
+        {
+            var message = new BookServiceResponse
+            {
+                BookId = result.Id,
+                MaxQuantity = result.Quantity,
+            };
+
+            bus.PubSub.Publish(message);
         }
     }
 }
