@@ -23,7 +23,7 @@ namespace Rental.Data.MessageGateway
         {
             using (_bus = RabbitHutch.CreateBus(_connectionString))
             {
-                _bus.PubSub.Subscribe<BookServiceResponse>("RentalMicroService", msg => ProcessMessage(msg));
+                _bus.PubSub.Subscribe<BookServiceResponse>("RentalMicroServiceBook", msg => ProcessMessage(msg));
 
                 lock (this)
                 {
@@ -41,6 +41,20 @@ namespace Rental.Data.MessageGateway
                 var _messageProducer = service.GetService<MessageProducer>();
 
                 var result = _rentalService.GetAllRentalStatusOnBook(msg.BookId);
+
+                var RentedOut = 0;
+
+                foreach(var item in result)
+                {
+                    if (item.Rented)
+                        RentedOut++;
+                }
+
+                if (RentedOut > msg.MaxQuantity)
+
+                    
+
+
             }
         }
     }
