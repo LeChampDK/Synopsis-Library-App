@@ -24,14 +24,52 @@ namespace APIGateway.Service
             rentalConnectionString = _configuration.GetConnectionString("Rental");
         }
 
-        public async Task<List<RentalStatusDTO>> GetRentalStatusAsync()
+        #region Rental
+        public async Task<string> RentBook(BookDTO rentBookDTO)
         {
             RestClient client = new RestClient();
-            RestRequest request = new RestRequest(rentalConnectionString);
-            
-            var response = client.GetAsync<List<RentalStatusDTO>>(request);
+            RestRequest request = new RestRequest(rentalConnectionString + "RentBook");
+            request.AddBody(rentBookDTO);
+
+            var response = client.PostAsync<string>(request);
             response.Wait();
             return response.Result;
         }
+
+        public async Task<string> ReturnBook(BookDTO returnBookDTO)
+        {
+            RestClient client = new RestClient();
+            RestRequest request = new RestRequest(rentalConnectionString + "ReturnBook");
+            request.AddBody(returnBookDTO);
+
+            var response = client.PutAsync<string>(request);
+            response.Wait();
+            return response.Result;
+        }
+        #endregion
+
+        #region Books
+        public async Task<List<Book>> GetBooks()
+        {
+            RestClient client = new RestClient();
+            RestRequest request = new RestRequest(booksConnectionString + "GetBooks");
+
+            var response = client.GetAsync<List<Book>>(request);
+            response.Wait();
+            return response.Result;
+        }
+        #endregion
+
+        #region Users
+        public async Task<List<User>> GetUsers()
+        {
+            RestClient client = new RestClient();
+            RestRequest request = new RestRequest(usersConnectionString + "GetUsers");
+
+            var response = client.GetAsync<List<User>>(request);
+            response.Wait();
+            return response.Result;
+        }
+        #endregion
     }
 }

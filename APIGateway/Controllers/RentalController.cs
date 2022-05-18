@@ -18,12 +18,30 @@ namespace APIGateway.Controllers
             _gatewayService = gatewayService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<RentalStatusDTO>>> GetRentalStatusAsync()
+        /// <summary>
+        /// Rent a book - If the book is not available, it will be reserved.
+        /// </summary>
+        /// <param name="rentBookDTO"></param>
+        /// <returns></returns>
+        [HttpPost("RentBook")]
+        public async Task<ActionResult<string>> RentBook(BookDTO rentBookDTO)
         {
-            var result = await _gatewayService.GetRentalStatusAsync();
+            var result = await _gatewayService.RentBook(rentBookDTO);
+            return Ok(result);
+        }
 
-            return result;
+        /// <summary>
+        /// Return book - If any book is reserved, will notify the next user.
+        /// </summary>
+        /// <param name="returnBookDTO"></param>
+        /// <returns></returns>
+        [HttpPut("ReturnBook")]
+        public async Task<ActionResult<string>> ReturnBook(BookDTO returnBookDTO)
+        {
+
+            var result = await _gatewayService.ReturnBook(returnBookDTO);
+            return Ok(result);
+
         }
     }
 }

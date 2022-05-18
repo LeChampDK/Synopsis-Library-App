@@ -24,9 +24,6 @@ namespace Rental.Controllers
         /// <summary>
         /// Get Rental Status - Testing purpose only
         /// </summary>
-        /// <remarks>
-        /// Returns the rental status
-        /// </remarks>
         /// <returns></returns>
         [HttpGet]
         public ActionResult<List<RentalStatus>> GetRentalStatus()
@@ -56,7 +53,6 @@ namespace Rental.Controllers
         /// <summary>
         /// Return book
         /// </summary>
-        /// 
         /// <param name="returnBookDTO"></param>
         /// <returns></returns>
         [HttpPut("ReturnBook")]

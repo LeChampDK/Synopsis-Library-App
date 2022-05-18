@@ -19,14 +19,11 @@ namespace Users.Controllers
         /// <summary>
         /// Get User
         /// </summary>
-        /// <remarks>
-        /// Returns the user
-        /// </remarks>
         /// <returns></returns>
-        [HttpGet("{Id}")]
-        public ActionResult<User> GetUser(int Id)
+        [HttpGet("GetUsers")]
+        public ActionResult<User> GetUser()
         {
-            var result = _userService.GetUser(Id);
+            var result = _userService.GetUsers();
             return Ok(result);
         }
     }

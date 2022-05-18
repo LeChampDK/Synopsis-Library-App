@@ -1,6 +1,8 @@
-﻿using Books.Service.Facade;
+﻿using Books.Models;
+using Books.Service.Facade;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Books.Controllers
 {
@@ -16,14 +18,11 @@ namespace Books.Controllers
         }
 
         /// <summary>
-        /// Get Book
+        /// Get Books - Returns all books
         /// </summary>
-        /// <remarks>
-        /// Returns the user
-        /// </remarks>
         /// <returns></returns>
-        [HttpGet]
-        public ActionResult<string> GetBook()
+        [HttpGet("GetBooks")]
+        public ActionResult<List<Book>> GetBook()
         {
             var result = _bookService.getBooks();
             return Ok(result);

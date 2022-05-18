@@ -7,6 +7,17 @@ namespace APIGateway.Service.Facade
 {
     public interface IAPIGatewayService
     {
-        Task<List<RentalStatusDTO>> GetRentalStatusAsync();
+        #region Rental
+        Task<string> RentBook(BookDTO rentBookDTO);
+        Task<string> ReturnBook(BookDTO returnBookDTO);
+        #endregion
+
+        #region Books
+        Task<List<Book>> GetBooks();
+        #endregion
+
+        #region Users
+        Task<List<User>> GetUsers();
+        #endregion
     }
 }
