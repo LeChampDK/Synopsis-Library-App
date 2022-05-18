@@ -40,9 +40,6 @@ namespace Books
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();
 
-            services.AddSingleton<MessageProducer>(new
-                MessageProducer(cloudAMQPConnectionString));
-
             services.AddSwaggerGen();
 
             services.AddControllers();

@@ -40,9 +40,6 @@ namespace Users
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();
 
-            services.AddSingleton<MessageProducer>(new
-                MessageProducer(cloudAMQPConnectionString));
-
             services.AddSwaggerGen();
 
             services.AddControllers();
@@ -85,6 +82,7 @@ namespace Users
             {
                 endpoints.MapControllers();
             });
+
             Task.Factory.StartNew(() =>
               new MessageReceiver(app.ApplicationServices, cloudAMQPConnectionString).Start());
         }

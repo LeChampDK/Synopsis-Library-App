@@ -1,7 +1,9 @@
 ﻿using EasyNetQ;
 using Global.Messages.Request;
+using Global.Messages.Response;
 using Rental.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Rental.Data.MessageGateway
 {
@@ -29,9 +31,28 @@ namespace Rental.Data.MessageGateway
             bus.PubSub.Publish(message);
         }
 
-        internal bool getUser(int userId)
+        internal async Task<bool> getUser(int userId)
         {
-            throw new NotImplementedException();
+            var message = new UserServiceReceive
+            {
+                UserId = userId
+            };
+
+            var result = await bus.Rpc.RequestAsync<UserServiceReceive, UserServiceResponse>(message);
+
+            return result.UserExist;
+        }
+
+        internal async Task<int> getBook(int id)
+        {
+            var message = new BookServiceReceive
+            {
+                BookId = id
+            };
+
+            var result = await bus.Rpc.RequestAsync<BookServiceReceive, BookServiceResponse>(message);
+
+            return result.BookId;
         }
     }
 }

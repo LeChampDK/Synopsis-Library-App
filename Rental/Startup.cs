@@ -1,3 +1,4 @@
+using EasyNetQ;
 using Global;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,6 +51,10 @@ namespace Rental
             services.AddSingleton<MessageProducer>(new
                 MessageProducer(cloudAMQPConnectionString));
 
+            IBus bus = RabbitHutch.CreateBus(cloudAMQPConnectionString);
+            services.AddSingleton(bus);
+            services.AddSingleton<MessageGatewayService>();
+
             services.AddSwaggerGen();
 
             services.AddControllers();
@@ -93,8 +98,8 @@ namespace Rental
                 endpoints.MapControllers();
             });
 
-            Task.Factory.StartNew(() =>
-                new MessageReceiver(app.ApplicationServices, cloudAMQPConnectionString).Start());
+            //Task.Factory.StartNew(() =>
+            //    new MessageReceiver(app.ApplicationServices, cloudAMQPConnectionString).Start());
         }
     }
 }

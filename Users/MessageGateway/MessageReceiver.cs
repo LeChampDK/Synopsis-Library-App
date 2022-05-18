@@ -1,5 +1,6 @@
 ﻿using EasyNetQ;
 using Global.Messages.Request;
+using Global.Messages.Response;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
@@ -23,7 +24,7 @@ namespace Users.MessageGateway
         {
             using (_bus = RabbitHutch.CreateBus(_connectionString))
             {
-                _bus.PubSub.Subscribe<UserServiceReceive>("UserMicroService", msg => ProcessMessage(msg));
+                _bus.Rpc.Respond<UserServiceReceive, UserServiceResponse>(msg => ProcessMessage(msg));
 
                 lock (this)
                 {
@@ -32,17 +33,35 @@ namespace Users.MessageGateway
             }
         }
 
-        private void ProcessMessage(UserServiceReceive msg)
+        private UserServiceResponse ProcessMessage(UserServiceReceive msg)
         {
             using (var scope = _provider.CreateScope())
             {
                 var service = scope.ServiceProvider;
                 var _userService = service.GetService<IUserService>();
-                var _messageProducer = service.GetService<MessageProducer>();
 
                 var result = _userService.GetUser(msg.UserId);
 
-                _messageProducer.UserResponse(result);
+                if (result != null)
+                {
+                    var message = new UserServiceResponse(msg)
+                    {
+                        UserId = result.Id,
+                        UserExist = true,
+                    };
+
+                    return message;
+                }
+                else
+                {
+                    var message = new UserServiceResponse(msg)
+                    {
+                        UserId = 0,
+                        UserExist = false,
+                    };
+
+                    return message;
+                }
             }
         }
 

@@ -50,7 +50,7 @@ namespace Rental.Data.MessageGateway
                         RentedOut++;
                 }
 
-                if (RentedOut > msg.MaxQuantity)
+                
 
                     
 

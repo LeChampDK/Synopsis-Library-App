@@ -1,9 +1,11 @@
-﻿using Rental.Data.Facade;
+﻿using Microsoft.AspNetCore.Mvc;
+using Rental.Data.Facade;
 using Rental.Data.MessageGateway;
 using Rental.Models;
 using Rental.Models.DTO;
 using Rental.Service.Facade;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Rental.Service
 {
@@ -28,9 +30,18 @@ namespace Rental.Service
             return _rentalRepository.GetAllRentalStatusOnBook(bookId);
         }
 
-        public BookRentalDTO RentBook(int userId)
+        public async Task<int> GetBook(int id)
         {
-            bool userExist = _messageProducer.getUser(userId);
+            var result = await _messageProducer.getBook(id);
+
+            return result;
+        }
+
+        public async Task<bool> GetUser(int id)
+        {
+            var result = await _messageProducer.getUser(id);
+
+            return result;
         }
     }
 }

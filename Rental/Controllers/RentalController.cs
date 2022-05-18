@@ -2,6 +2,7 @@
 using Rental.Models;
 using Rental.Service.Facade;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Rental.Controllers
 {
@@ -27,6 +28,18 @@ namespace Rental.Controllers
         public ActionResult<List<RentalStatus>> GetRentalStatus()
         {
             return _rentalService.GetAllRentalStatus();
+        }
+
+        [HttpGet("user/{id}")]
+        public async Task<ActionResult<bool>> GetUserAsync(int id)
+        {
+            return await _rentalService.GetUser(id);
+        }
+
+        [HttpGet("book/{bookId}")]
+        public async Task<ActionResult<int>> GetBookAsync(int bookId)
+        {
+            return await _rentalService.GetBook(bookId);
         }
     }
 }

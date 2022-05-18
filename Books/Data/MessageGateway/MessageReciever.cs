@@ -2,6 +2,7 @@
 using Books.Service.Facade;
 using EasyNetQ;
 using Global.Messages.Request;
+using Global.Messages.Response;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
@@ -24,7 +25,7 @@ namespace Books.Data.MessageGateway
         {
             using (_bus = RabbitHutch.CreateBus(_connectionString))
             {
-                _bus.PubSub.Subscribe<BookServiceReceive>("BookMicroService", msg => ProcessMessage(msg));
+                _bus.Rpc.Respond<BookServiceReceive, BookServiceResponse>(msg => ProcessMessage(msg));
 
                 lock (this)
                 {
@@ -33,20 +34,25 @@ namespace Books.Data.MessageGateway
             }
         }
 
-        private void ProcessMessage(BookServiceReceive msg)
+        private BookServiceResponse ProcessMessage(BookServiceReceive msg)
         {
             using (var scope = _provider.CreateScope())
             {
                 var service = scope.ServiceProvider;
                 var _bookService = service.GetService<IBookService>();
-                var _messageProducer = service.GetService<MessageProducer>();
 
                 var result = _bookService.getBook(msg.BookId);
 
                 if (result == null)
                     throw new Exception("Book not found");
 
-                _messageProducer.BookResponse(result);
+                var message = new BookServiceResponse
+                {
+                    BookId = result.Id,
+                    MaxQuantity = result.Quantity,
+                };
+
+                return message;
             }
         }
     }
