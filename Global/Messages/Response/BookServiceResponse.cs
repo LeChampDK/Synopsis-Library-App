@@ -11,7 +11,7 @@ namespace Global.Messages.Response
     public class BookServiceResponse : BaseMessage
     {
         public BookServiceResponse() : base() { }
-        public BookServiceResponse(BookServiceReceive arg) : base(arg) { }
+        public BookServiceResponse(BookServiceRequest arg) : base(arg) { }
         public BookQuantity BookQuantity { get; set; }
     }
 }

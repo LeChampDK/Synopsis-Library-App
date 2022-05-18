@@ -26,7 +26,7 @@ namespace Books.MessageHandler
         {
             using (_bus = RabbitHutch.CreateBus(_connectionString))
             {
-                _bus.Rpc.Respond<BookServiceReceive, BookServiceResponse>(msg => ProcessMessage(msg));
+                _bus.Rpc.Respond<BookServiceRequest, BookServiceResponse>(msg => ProcessMessage(msg));
 
                 lock (this)
                 {
@@ -35,7 +35,7 @@ namespace Books.MessageHandler
             }
         }
 
-        private BookServiceResponse ProcessMessage(BookServiceReceive msg)
+        private BookServiceResponse ProcessMessage(BookServiceRequest msg)
         {
             using (var scope = _provider.CreateScope())
             {

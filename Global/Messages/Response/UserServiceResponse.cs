@@ -10,7 +10,7 @@ namespace Global.Messages.Response
     public class UserServiceResponse : BaseMessage
     {
         public UserServiceResponse() : base() { }
-        public UserServiceResponse(UserServiceReceive arg) : base(arg) { }
+        public UserServiceResponse(UserServiceRequest arg) : base(arg) { }
         public int UserId { get; set; }
         public bool UserExist { get; set; }
     }

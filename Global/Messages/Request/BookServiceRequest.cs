@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Global.Messages.Request
 {
-    public class BookServiceReceive : BaseMessage
+    public class BookServiceRequest : BaseMessage
     {
         public int BookId { get; set; }
     }

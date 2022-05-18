@@ -8,6 +8,7 @@ using Rental.Models.DTO;
 using Rental.Service.Facade;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Rental.Service
@@ -85,9 +86,41 @@ namespace Rental.Service
             }
         }
 
-        public void ReturnBook(BookDTO returnBook)
+        public async Task ReturnBookAsync(BookDTO returnBook)
         {
             _rentalRepository.ReturnBook(returnBook.BookId, returnBook.UserId);
+            await this.CheckReservationsOnBookAsync(returnBook.BookId);
+        }
+
+        public async Task CheckReservationsOnBookAsync(int bookId)
+        {
+            var reservedEntriesOnBook = _rentalRepository.GetAllReservedStatusOnBook(bookId);
+            RentalStatus oldestEntry = null;
+
+            if (reservedEntriesOnBook.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (var item in reservedEntriesOnBook)
+            {
+                if(oldestEntry == null)
+                {
+                    oldestEntry = item;
+                    continue;
+                }
+
+                if (oldestEntry.ReservedTime > item.ReservedTime)
+                {
+                    oldestEntry = item;
+                }
+            }
+
+            var book = await _messageProducer.GetBookDetails(oldestEntry.BookId);
+
+            _messageProducer.SendReservationNotice(book, oldestEntry.UserId);
+
+            Thread.Sleep(12000);
         }
     }
 }

@@ -53,7 +53,6 @@ namespace Rental
 
             IBus bus = RabbitHutch.CreateBus(cloudAMQPConnectionString);
             services.AddSingleton(bus);
-            services.AddSingleton<MessageGatewayService>();
 
             services.AddSwaggerGen();
 

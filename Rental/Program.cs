@@ -16,32 +16,8 @@ namespace Rental
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-            try
-            {
-                MainAsync().Wait();
-                Environment.Exit(0);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
 
-        static async Task MainAsync()
-        {
-            ServiceCollection serviceCollection = new ServiceCollection();
-            IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-            try
-            {
-                await serviceProvider.GetService<MessageGatewayService>().Run();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)

@@ -34,18 +34,6 @@ namespace Rental.Controllers
             return _rentalService.GetAllRentalStatus();
         }
 
-        [HttpGet("user/{id}")]
-        public async Task<ActionResult<bool>> GetUserAsync(int id)
-        {
-            return await _rentalService.GetUser(id);
-        }
-
-        [HttpGet("book/{bookId}")]
-        public async Task<ActionResult<BookQuantity>> GetBookAsync(int bookId)
-        {
-            return await _rentalService.GetBook(bookId);
-        }
-
         /// <summary>
         /// Rent book
         /// </summary>
@@ -65,12 +53,12 @@ namespace Rental.Controllers
             }
         }
 
-        [HttpPut("Return Book")]
+        [HttpPut("ReturnBook")]
         public ActionResult<string> ReturnBook(BookDTO returnBookDTO)
         {
             try
             {
-                _rentalService.ReturnBook(returnBookDTO);
+                _rentalService.ReturnBookAsync(returnBookDTO);
                 return Ok("Book returned successfully.");
             }
             catch (Exception e)

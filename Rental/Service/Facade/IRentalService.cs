@@ -15,6 +15,6 @@ namespace Rental.Service.Facade
         Task<bool> GetUser(int id);
         Task<BookQuantity> GetBook(int id);
         Task<RentalResponseDTO> RentBook(BookDTO rentBookDTO);
-        void ReturnBook(BookDTO returnBookDTO);
+        Task ReturnBookAsync(BookDTO returnBookDTO);
     }
 }

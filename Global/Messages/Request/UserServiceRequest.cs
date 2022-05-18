@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Global.Messages.Request
 {
-    public class UserServiceReceive : BaseMessage
+    public class UserServiceRequest : BaseMessage
     {
         public int UserId { get; set; }
     }

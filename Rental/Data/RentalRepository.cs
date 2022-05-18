@@ -25,6 +25,11 @@ namespace Rental.Data
             return new List<RentalStatus>(_db.RentalStatus.Where(x => x.BookId == bookId && x.Rented == true));
         }
 
+        public List<RentalStatus> GetAllReservedStatusOnBook(int bookId)
+        {
+            return new List<RentalStatus>(_db.RentalStatus.Where(x => x.BookId == bookId && x.Reserve == true));
+        }
+
         public void ReserveBook(int bookId, int userId)
         {
             var newReservation = new RentalStatus

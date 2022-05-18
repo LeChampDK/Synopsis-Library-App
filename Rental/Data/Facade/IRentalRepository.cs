@@ -10,5 +10,6 @@ namespace Rental.Data.Facade
         void ReserveBook(int bookId, int userId);
         void RentBook(int bookId, int userId);
         void ReturnBook(int bookId, int userId);
+        List<RentalStatus> GetAllReservedStatusOnBook(int bookId);
     }
 }
