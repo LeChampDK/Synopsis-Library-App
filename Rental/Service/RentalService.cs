@@ -119,8 +119,6 @@ namespace Rental.Service
             var book = await _messageProducer.GetBookDetails(oldestEntry.BookId);
 
             _messageProducer.SendReservationNotice(book, oldestEntry.UserId);
-
-            Thread.Sleep(12000);
         }
     }
 }

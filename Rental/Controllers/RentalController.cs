@@ -54,11 +54,11 @@ namespace Rental.Controllers
         }
 
         [HttpPut("ReturnBook")]
-        public ActionResult<string> ReturnBook(BookDTO returnBookDTO)
+        public async Task<ActionResult<string>> ReturnBookAsync(BookDTO returnBookDTO)
         {
             try
             {
-                _rentalService.ReturnBookAsync(returnBookDTO);
+                await _rentalService.ReturnBookAsync(returnBookDTO);
                 return Ok("Book returned successfully.");
             }
             catch (Exception e)

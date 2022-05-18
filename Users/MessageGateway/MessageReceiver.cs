@@ -25,7 +25,7 @@ namespace Users.MessageGateway
             using (_bus = RabbitHutch.CreateBus(_connectionString))
             {
                 _bus.Rpc.Respond<UserServiceRequest, UserServiceResponse>(msg => ProcessMessage(msg));
-                _bus.PubSub.Subscribe<ReservationNotificationRequest>("Reservation Notice", SendNofiticationToUser);
+                _bus.PubSub.Subscribe<ReservationNotificationRequest>("ReservationNotice", SendNofiticationToUser);
 
                 lock (this)
                 {
@@ -70,7 +70,9 @@ namespace Users.MessageGateway
         {
             Console.WriteLine("Vi henter User fra ID i vores message");
             Console.WriteLine("Vi sende en mail til kunden med bogen der er klar til at blive lånt.");
-            Console.WriteLine(msg);
+            Console.WriteLine("UserId: " + msg.UserId);
+            Console.WriteLine("Book title: " + msg.BookDetails.Title);
+            Console.WriteLine("Book author: " + msg.BookDetails.Author);
         }
     }
 }
