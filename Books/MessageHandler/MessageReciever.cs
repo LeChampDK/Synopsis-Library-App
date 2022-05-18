@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 
-namespace Books.Data.MessageGateway
+namespace Books.MessageHandler
 {
     public class MessageReciever
     {

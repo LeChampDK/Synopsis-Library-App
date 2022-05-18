@@ -1,6 +1,6 @@
 using Books.Data;
 using Books.Data.Facade;
-using Books.Data.MessageGateway;
+using Books.MessageHandler;
 using Books.Service;
 using Books.Service.Facade;
 using Global;

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rental.Models;
 using Rental.Models.DTO;
 using Rental.Service.Facade;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -45,10 +46,37 @@ namespace Rental.Controllers
             return await _rentalService.GetBook(bookId);
         }
 
+        /// <summary>
+        /// Rent book
+        /// </summary>
+        /// <param name="rentBookDTO"></param>
+        /// <returns></returns>
         [HttpPost("RentBook")]
-        public async Task<ActionResult<RentalResponseDTO>> RentBook(RentBookDTO rentBookDTO)
+        public async Task<ActionResult<string>> RentBook(BookDTO rentBookDTO)
         {
-            return await _rentalService.RentBook(rentBookDTO);
+            var result = await _rentalService.RentBook(rentBookDTO);
+            if (result.Rented)
+            {
+                return Ok("The book has been rented.");
+            }
+            else
+            {
+                return Ok("The book has been reserved.");
+            }
+        }
+
+        [HttpPut("Return Book")]
+        public ActionResult<string> ReturnBook(BookDTO returnBookDTO)
+        {
+            try
+            {
+                _rentalService.ReturnBook(returnBookDTO);
+                return Ok("Book returned successfully.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }            
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Rental.Service
             return result;
         }
 
-        public async Task<RentalResponseDTO> RentBook(RentBookDTO rentBookDTO)
+        public async Task<RentalResponseDTO> RentBook(BookDTO rentBookDTO)
         {
             var user = _messageProducer.getUser(rentBookDTO.UserId);
             var book = _messageProducer.getBook(rentBookDTO.BookId);
@@ -57,44 +57,37 @@ namespace Rental.Service
             var taskUser = await user;
             var taskBook = await book;
 
-            try
+            var result = new RentalResponseDTO();
+
+            if (!taskUser)
+                throw new Exception("User does not exist");
+
+            if (taskBook.Id <= 0)
+                throw new Exception("Book does not exist");
+
+            var bookRentalStatus = _rentalRepository.GetAllRentalStatusOnBook(taskBook.Id);
+
+            if (bookRentalStatus.Count >= taskBook.Quantity)
             {
-                if (taskUser)
-                {
-                    if (taskBook.Id > 0)
-                    {
-                        var bookRentalStatus = _rentalRepository.GetAllRentalStatusOnBook(taskBook.Id);
+                _rentalRepository.ReserveBook(rentBookDTO.BookId, rentBookDTO.UserId);
 
-                        if (bookRentalStatus.Count >= taskBook.Quantity)
-                        {
-                            _rentalRepository.ReserveBook(rentBookDTO.BookId, rentBookDTO.UserId);
+                result.Reserved = true;
 
-                            var result = new RentalResponseDTO
-                            {
-                                Reserved = true
-                            };
-
-                            return result;
-                        }
-                        else
-                        {
-                            _rentalRepository.RentBook(rentBookDTO.BookId, rentBookDTO.UserId);
-
-                            var result = new RentalResponseDTO
-                            {
-                                Rented = true
-                            };
-
-                            return result;
-                        }
-                    }
-                }
+                return result;
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e.Message);
+                _rentalRepository.RentBook(rentBookDTO.BookId, rentBookDTO.UserId);
+
+                result.Rented = true;
+
+                return result;
             }
-            return null;
+        }
+
+        public void ReturnBook(BookDTO returnBook)
+        {
+            _rentalRepository.ReturnBook(returnBook.BookId, returnBook.UserId);
         }
     }
 }

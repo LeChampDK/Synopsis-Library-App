@@ -14,6 +14,7 @@ namespace Rental.Service.Facade
         List<RentalStatus> GetAllRentalStatusOnBook(int bookId);
         Task<bool> GetUser(int id);
         Task<BookQuantity> GetBook(int id);
-        Task<RentalResponseDTO> RentBook(RentBookDTO rentBookDTO);
+        Task<RentalResponseDTO> RentBook(BookDTO rentBookDTO);
+        void ReturnBook(BookDTO returnBookDTO);
     }
 }
