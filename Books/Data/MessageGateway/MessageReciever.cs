@@ -3,6 +3,7 @@ using Books.Service.Facade;
 using EasyNetQ;
 using Global.Messages.Request;
 using Global.Messages.Response;
+using Global.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
@@ -46,10 +47,14 @@ namespace Books.Data.MessageGateway
                 if (result == null)
                     throw new Exception("Book not found");
 
-                var message = new BookServiceResponse
+               
+                var message = new BookServiceResponse(msg)
                 {
-                    BookId = result.Id,
-                    MaxQuantity = result.Quantity,
+                    BookQuantity = new BookQuantity
+                    {
+                        Id = result.Id,
+                        Quantity = result.Quantity,
+                    }
                 };
 
                 return message;

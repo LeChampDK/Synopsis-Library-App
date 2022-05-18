@@ -1,6 +1,7 @@
 ﻿using EasyNetQ;
 using Global.Messages.Request;
 using Global.Messages.Response;
+using Global.Models;
 using Rental.Models;
 using System;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace Rental.Data.MessageGateway
             return result.UserExist;
         }
 
-        internal async Task<int> getBook(int id)
+        internal async Task<BookQuantity> getBook(int id)
         {
             var message = new BookServiceReceive
             {
@@ -52,7 +53,7 @@ namespace Rental.Data.MessageGateway
 
             var result = await bus.Rpc.RequestAsync<BookServiceReceive, BookServiceResponse>(message);
 
-            return result.BookId;
+            return result.BookQuantity;
         }
     }
 }

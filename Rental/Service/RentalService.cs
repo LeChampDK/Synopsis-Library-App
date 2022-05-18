@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Global.Models;
+using Global.Models.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Rental.Data.Facade;
 using Rental.Data.MessageGateway;
 using Rental.Models;
 using Rental.Models.DTO;
 using Rental.Service.Facade;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -30,7 +33,9 @@ namespace Rental.Service
             return _rentalRepository.GetAllRentalStatusOnBook(bookId);
         }
 
-        public async Task<int> GetBook(int id)
+        
+
+        public async Task<BookQuantity> GetBook(int id)
         {
             var result = await _messageProducer.getBook(id);
 
@@ -42,6 +47,54 @@ namespace Rental.Service
             var result = await _messageProducer.getUser(id);
 
             return result;
+        }
+
+        public async Task<RentalResponseDTO> RentBook(RentBookDTO rentBookDTO)
+        {
+            var user = _messageProducer.getUser(rentBookDTO.UserId);
+            var book = _messageProducer.getBook(rentBookDTO.BookId);
+
+            var taskUser = await user;
+            var taskBook = await book;
+
+            try
+            {
+                if (taskUser)
+                {
+                    if (taskBook.Id > 0)
+                    {
+                        var bookRentalStatus = _rentalRepository.GetAllRentalStatusOnBook(taskBook.Id);
+
+                        if (bookRentalStatus.Count >= taskBook.Quantity)
+                        {
+                            _rentalRepository.ReserveBook(rentBookDTO.BookId, rentBookDTO.UserId);
+
+                            var result = new RentalResponseDTO
+                            {
+                                Reserved = true
+                            };
+
+                            return result;
+                        }
+                        else
+                        {
+                            _rentalRepository.RentBook(rentBookDTO.BookId, rentBookDTO.UserId);
+
+                            var result = new RentalResponseDTO
+                            {
+                                Rented = true
+                            };
+
+                            return result;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return null;
         }
     }
 }

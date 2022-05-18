@@ -1,4 +1,5 @@
 ﻿using Global.Messages.Request;
+using Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ namespace Global.Messages.Response
     {
         public BookServiceResponse() : base() { }
         public BookServiceResponse(BookServiceReceive arg) : base(arg) { }
-        public int BookId { get; set; }
-        public int MaxQuantity { get; set; }
+        public BookQuantity BookQuantity { get; set; }
     }
 }

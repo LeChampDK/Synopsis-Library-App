@@ -7,5 +7,7 @@ namespace Rental.Data.Facade
     {
         List<RentalStatus> GetAllRentalStatus();
         List<RentalStatus> GetAllRentalStatusOnBook(int bookId);
+        void ReserveBook(int bookId, int userId);
+        void RentBook(int bookId, int userId);
     }
 }

@@ -40,7 +40,7 @@ namespace Rental.Data.MessageGateway
                 var _rentalService = service.GetService<IRentalService>();
                 var _messageProducer = service.GetService<MessageProducer>();
 
-                var result = _rentalService.GetAllRentalStatusOnBook(msg.BookId);
+                var result = _rentalService.GetAllRentalStatusOnBook(msg.BookQuantity.Id);
 
                 var RentedOut = 0;
 

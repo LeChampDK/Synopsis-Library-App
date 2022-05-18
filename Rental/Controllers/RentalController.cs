@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Global.Models;
+using Global.Models.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Rental.Models;
+using Rental.Models.DTO;
 using Rental.Service.Facade;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,7 +21,7 @@ namespace Rental.Controllers
         }
 
         /// <summary>
-        /// Get Rental Status
+        /// Get Rental Status - Testing purpose only
         /// </summary>
         /// <remarks>
         /// Returns the rental status
@@ -37,9 +40,15 @@ namespace Rental.Controllers
         }
 
         [HttpGet("book/{bookId}")]
-        public async Task<ActionResult<int>> GetBookAsync(int bookId)
+        public async Task<ActionResult<BookQuantity>> GetBookAsync(int bookId)
         {
             return await _rentalService.GetBook(bookId);
+        }
+
+        [HttpPost("RentBook")]
+        public async Task<ActionResult<RentalResponseDTO>> RentBook(RentBookDTO rentBookDTO)
+        {
+            return await _rentalService.RentBook(rentBookDTO);
         }
     }
 }
