@@ -12,6 +12,9 @@ using Users.Service;
 using Global;
 using Users.MessageGateway;
 using System.Threading.Tasks;
+using System.Reflection;
+using System;
+using System.IO;
 
 namespace Users
 {
@@ -40,7 +43,12 @@ namespace Users
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             services.AddControllers();
         }

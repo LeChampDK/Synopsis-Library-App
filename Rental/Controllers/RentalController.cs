@@ -53,8 +53,14 @@ namespace Rental.Controllers
             }
         }
 
+        /// <summary>
+        /// Return book
+        /// </summary>
+        /// 
+        /// <param name="returnBookDTO"></param>
+        /// <returns></returns>
         [HttpPut("ReturnBook")]
-        public async Task<ActionResult<string>> ReturnBookAsync(BookDTO returnBookDTO)
+        public async Task<ActionResult<string>> ReturnBook(BookDTO returnBookDTO)
         {
             try
             {

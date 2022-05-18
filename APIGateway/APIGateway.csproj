@@ -5,6 +5,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\Synopsis-Library-App</DockerfileContext>
     <UserSecretsId>14e02a07-3cdb-4f28-ba99-b7a964b148c9</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

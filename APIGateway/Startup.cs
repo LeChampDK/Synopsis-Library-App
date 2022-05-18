@@ -12,7 +12,9 @@ using Microsoft.OpenApi.Models;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace APIGateway
@@ -33,7 +35,12 @@ namespace APIGateway
         {
             services.AddScoped<IAPIGatewayService, APIGatewayService>();
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             services.AddControllers();
         }

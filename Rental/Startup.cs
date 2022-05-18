@@ -17,7 +17,9 @@ using Rental.Service;
 using Rental.Service.Facade;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Rental
@@ -54,8 +56,13 @@ namespace Rental
             IBus bus = RabbitHutch.CreateBus(cloudAMQPConnectionString);
             services.AddSingleton(bus);
 
-            services.AddSwaggerGen();
-
+            services.AddSwaggerGen(c =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+            
             services.AddControllers();
         }
 

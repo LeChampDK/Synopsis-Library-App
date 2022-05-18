@@ -9,11 +9,11 @@ namespace APIGateway.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class APIGatewayController : Controller
+    public class RentalController : Controller
     {
         private readonly IAPIGatewayService _gatewayService;
 
-        public APIGatewayController(IAPIGatewayService gatewayService)
+        public RentalController(IAPIGatewayService gatewayService)
         {
             _gatewayService = gatewayService;
         }
